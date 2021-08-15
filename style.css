@@ -67,7 +67,7 @@ h3 {
   justify-content: space-between;
 }
 
-.form__submit {
+.input__submit {
   display: flex;
   justify-content: flex-end;
   margin-top: 30px;
@@ -86,7 +86,7 @@ h3 {
   color: #d3d3d3;
 }
 
-.form__submit-btn {
+.input__btn {
   font-size: 0.8em;
   width: 150px;
   height: 50px;
@@ -95,7 +95,7 @@ h3 {
   cursor: pointer;
 }
 
-.form__submit-btn_disabled {
+.input__btn_disabled {
   background-color: #f1f1f1;
   cursor: default;
 }
@@ -103,6 +103,10 @@ h3 {
 .no-songs {
   height: 70px;
   display: flex;
+}
+
+.no-songs_hidden {
+  display: none;
 }
 
 .no-songs__text {
@@ -147,9 +151,4 @@ h3 {
 .song__like_active {
   opacity: 1;
   background: url(https://code.s3.yandex.net/web-code/dom/heart-filled.svg) center no-repeat;
-}
-
-
-.no-songs_hidden {
-  display: none;
 }

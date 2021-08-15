@@ -1,42 +1,52 @@
-let container = document.querySelector('.container');
-let songsContainer = container.querySelector('.songs-container');
-let addButton = container.querySelector('.form__submit-btn_action_add');
-let resetButton = container.querySelector('.form__submit-btn_action_reset');
+const container = document.querySelector('.container');
+const songsContainer = container.querySelector('.songs-container');
+const addButton = container.querySelector('.input__btn_action_add');
+const resetButton = container.querySelector('.input__btn_action_reset');
+const noSongsElement = container.querySelector('.no-songs');
 
-function renderAdded() {
-  let songs = songsContainer.querySelectorAll('.song'); //Определение переменной songs тоже перенесите внутрь функции renderAdded. Если этого не сделать, то в songs будут храниться только те песни, что были в контейнере в момент загрузки страницы. Нам это не подходит: нужно, чтобы в songs были все песни, что есть в контейнере. При каждом вызове функции renderAdded надо переопределять переменную songs.
+function renderHasSongs() {
+  resetButton.removeAttribute('disabled');
+  resetButton.classList.remove('input__btn_disabled');
+  noSongsElement.classList.add('no-songs_hidden');
+}
+
+function renderNoSongs() {
+  resetButton.setAttribute('disabled', true);
+  resetButton.classList.add('input__btn_disabled');
+  noSongsElement.classList.remove('no-songs_hidden');
+}
+
+function addSong(artistValue, titleValue) {
+  const songTemplate = document.querySelector('#song-template').content;
+  const songElement = songTemplate.querySelector('.song').cloneNode(true);
+
+  songElement.querySelector('.song__artist').textContent = artistValue;
+  songElement.querySelector('.song__title').textContent = titleValue;
   
-  /* определите переменную noSongsElement.
-  В неё должен попадать элемент с классом .no-songs */
-  let noSongsElement = container.querySelector('.no-songs'); 
+  songElement.querySelector('.song__like').addEventListener('click', function (evt) {
+    evt.target.classList.toggle('song__like_active');
+}); 
   
-  if (songs.length === 0) {
-    resetButton.setAttribute('disabled', 'true');
-    resetButton.classList.add('form__submit-btn_disabled');
-    // необходимо убрать скрытие, если песен нет
-    noSongsElement.classList.remove('no-songs_hidden');
-  } else  {
-    resetButton.removeAttribute('disabled', 'true');
-    resetButton.classList.remove('form__submit-btn_disabled');
-    // необходимо скрыть элемент no-songs, если в плейлисте есть треки
-    noSongsElement.classList.add('no-songs_hidden');
+  songsContainer.append(songElement);
+}
+
+addButton.addEventListener('click', function () {
+  const artist = document.querySelector('.input__text_type_artist');
+  const title = document.querySelector('.input__text_type_title');
+
+  addSong(artist.value, title.value);
+  renderHasSongs();
+
+  artist.value = '';
+  title.value = '';
+});
+
+resetButton.addEventListener('click', function () {
+  const songs = document.querySelectorAll('.song')
+
+  for (let i = 0; i < songs.length; i++) {
+    songs[i].remove();
   }
-}
 
-// Нужно вызвать функцию renderAdded дважды:
-function addSong() {
-  songsContainer.innerHTML += `
-    <div class="song">  
-      <h4 class="song__artist">Nirvana</h4>
-      <p class="song__title">Polly</p>
-      <button class="song__like"></button>
-    </div>
-  `;
-    // нужно вызвать функцию здесь
-    renderAdded();
-}
-  addButton.addEventListener('click', addSong);
-
-/* и в самом конце, чтобы renderAdded отработал при загрузке страницы */
-
-renderAdded(); 
+  renderNoSongs();
+});
